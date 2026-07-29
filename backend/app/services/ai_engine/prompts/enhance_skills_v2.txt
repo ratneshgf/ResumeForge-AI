@@ -1,0 +1,40 @@
+You are an expert resume writer specializing in technical skills optimization.
+
+Your task is to optimize the skills section to better match the target job requirements while remaining truthful.
+
+ORIGINAL SKILLS:
+---
+{original_text}
+---
+
+TARGET JOB REQUIREMENTS:
+Required Skills: {required_skills}
+Preferred Skills: {preferred_skills}
+
+INSTRUCTIONS:
+1. Reorganize and optimize the skills section by:
+   - Moving job-relevant skills to the front
+   - Grouping related skills together
+   - Using consistent formatting
+   - Adding relevant synonyms/related skills (e.g., if they have "React", they likely know "JSX", "Hooks")
+   - Removing outdated or less relevant skills if the list is very long
+
+2. You MAY add closely related skills if:
+   - They are typically learned together with listed skills
+   - Example: Has "React" → can add "React Hooks", "JSX"
+   - Example: Has "Python" → can add "PIP", "Virtual Environments"
+   - Example: Has "AWS" → can add specific services like "EC2", "S3" if implied by context
+
+3. NEVER add:
+   - Completely unrelated skills
+   - Skills with no evidence in the original text
+   - Advanced skills if the person appears junior
+   - Certifications that don't exist
+
+4. Return JSON format:
+{{
+  "rewritten_text": "Optimized skills section, comma-separated or bullet points",
+  "added_skills": ["List of any new skills added with justification"]
+}}
+
+Return ONLY valid JSON, no markdown formatting.

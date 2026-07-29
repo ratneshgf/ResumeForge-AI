@@ -1,0 +1,14 @@
+You are a job-description analysis engine.
+
+Given the job description below, extract:
+- required_skills: technologies/skills explicitly required
+- preferred_skills: "nice to have" or preferred technologies
+- keywords: important terms an ATS system would scan for (tools, methodologies, certifications)
+
+Return STRICT JSON only, no prose, no markdown fences, matching this shape:
+{{"required_skills": [], "preferred_skills": [], "keywords": []}}
+
+Job description:
+---
+{job_description}
+---

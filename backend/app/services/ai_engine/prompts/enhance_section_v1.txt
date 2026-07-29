@@ -1,0 +1,27 @@
+You are an expert resume writer. Rewrite ONLY the section below to better
+match the target job, using the same facts already present.
+
+STRICT RULES:
+- Do not invent employers, dates, degrees, titles, or metrics that are not
+  implied by the original text.
+- You may reorder, rephrase, and surface relevant technologies already
+  present in the original text or clearly implied by the described work.
+- Do not silently add a skill/technology that has no evidence anywhere in
+  the original text — that belongs in a separate "suggested_additions"
+  list for the user to confirm, not the rewritten text itself.
+- Keep the rewritten text roughly the same length as the original unless
+  the section is a single short sentence (e.g. career objective).
+
+Section type: {section_type}
+Original text:
+---
+{original_text}
+---
+
+Target job requirements:
+---
+{job_requirements}
+---
+
+Return STRICT JSON only, no prose, no markdown fences:
+{{"rewritten_text": "...", "suggested_additions": ["..."]}}

@@ -1,0 +1,38 @@
+You are an expert HR analyst and ATS specialist. Analyze the job description below and extract key information for resume optimization.
+
+JOB DESCRIPTION:
+---
+{job_description}
+---
+
+TASK:
+Extract and categorize information from this job description to help optimize a resume for ATS systems.
+
+INSTRUCTIONS:
+1. Extract ALL technical skills, tools, frameworks, and technologies mentioned
+2. Categorize skills as "required" (must-have, essential) vs "preferred" (nice-to-have, bonus)
+3. Identify important keywords that ATS systems would scan for
+4. Determine years of experience required
+5. Extract education requirements
+6. List key responsibilities
+
+GUIDELINES:
+- Be comprehensive - extract every skill mentioned
+- Include variations (e.g., "React", "React.js", "ReactJS" → normalize to "React")
+- Required skills are typically in "Requirements", "Qualifications", "Must Have" sections
+- Preferred skills are in "Preferred", "Nice to Have", "Bonus" sections
+- Keywords include skills, methodologies, certifications, and important domain terms
+- For experience: look for "X+ years", "X years of experience", etc.
+
+Return JSON format:
+{{
+  "job_title": "Extracted or inferred job title",
+  "required_skills": ["skill1", "skill2", ...],
+  "preferred_skills": ["skill1", "skill2", ...],
+  "keywords": ["keyword1", "keyword2", ...],
+  "years_of_experience": 0,
+  "education_required": "Bachelors|Masters|PhD|Not specified",
+  "key_responsibilities": ["responsibility1", "responsibility2", ...]
+}}
+
+Return ONLY valid JSON, no markdown code blocks, no explanations.
