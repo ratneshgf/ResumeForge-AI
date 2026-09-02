@@ -253,28 +253,47 @@ def enhance_resume(sections: List[dict], job_description: str) -> List[dict]:
         
         # Process each paragraph in the section
         for para in section["paragraphs"]:
+            para_text = para["text"].strip()
+            
+            # Skip very short paragraphs
+            if len(para_text) < 10:
+                logger.info(f"Skipping short paragraph ({len(para_text)} chars): {para_text[:50]}")
+                continue
+                
             try:
+                logger.info(f"Enhancing paragraph in {heading}: {para_text[:100]}...")
+                
                 result = enhance_section(
                     heading, 
-                    para["text"], 
+                    para_text, 
                     job_description,
                     full_resume_text
                 )
                 
+                rewritten = result["rewritten_text"].strip()
+                original = para_text
+                
+                logger.info(f"AI returned text ({len(rewritten)} chars): {rewritten[:100]}...")
+                logger.info(f"Original vs Rewritten match: {original == rewritten}")
+                
+                # Compare normalized versions (strip whitespace, case insensitive for comparison)
+                normalized_original = " ".join(original.lower().split())
+                normalized_rewritten = " ".join(rewritten.lower().split())
+                
                 # Only add to changes if text was actually modified
-                if result.get("modified", False):
+                if normalized_original != normalized_rewritten:
                     changes.append({
                         "para_index": para["para_index"],
                         "heading": heading,
-                        "before": para["text"],
-                        "after": result["rewritten_text"],
+                        "before": original,
+                        "after": rewritten,
                         "section_type": result["section_type"],
                         "changes_made": result.get("changes_made", []),
                         "confidence": result.get("confidence", "medium")
                     })
-                    logger.info(f"Enhanced paragraph in {heading} section")
+                    logger.info(f"✓ Enhanced paragraph in {heading} section - changes detected")
                 else:
-                    logger.info(f"No changes needed for paragraph in {heading}")
+                    logger.warning(f"✗ No changes for paragraph in {heading} - AI returned same text")
             
             except AIClientError as e:
                 # Propagate AI errors - user needs to know AI failed
@@ -287,6 +306,11 @@ def enhance_resume(sections: List[dict], job_description: str) -> List[dict]:
                 continue
     
     logger.info(f"Resume enhancement complete. Generated {len(changes)} changes.")
+    
+    # If no changes were generated, log a warning
+    if len(changes) == 0:
+        logger.warning("No changes generated! This might indicate an issue with AI prompts or resume content.")
+    
     return changes
 
 

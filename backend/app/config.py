@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     ENV: str = "development"
 
     # CORS
-    FRONTEND_ORIGIN: str = "http://localhost:5173"
+    FRONTEND_ORIGIN: str = "http://localhost:5174"
 
     # AI providers
     GEMINI_API_KEY: str = ""
@@ -21,8 +21,8 @@ class Settings(BaseSettings):
     AI_PROVIDER: str = "gemini"  # "gemini" or "openai"
     
     # AI Configuration
-    AI_MAX_RETRIES: int = 3
-    AI_TIMEOUT_SECONDS: int = 30
+    AI_MAX_RETRIES: int = 5
+    AI_TIMEOUT_SECONDS: int = 60
     AI_TEMPERATURE: float = 0.7
 
     # Razorpay

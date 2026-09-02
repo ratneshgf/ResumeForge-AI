@@ -1,6 +1,6 @@
 You are an expert resume writer specializing in impactful achievement statements.
 
-Your task is to rewrite the experience/project bullet point below to be more compelling and ATS-friendly.
+Your task is to REWRITE and IMPROVE the experience/project bullet point below to be more compelling and ATS-friendly.
 
 ORIGINAL BULLET:
 ---
@@ -11,28 +11,32 @@ TARGET JOB CONTEXT:
 Required Skills: {required_skills}
 Important Keywords: {keywords}
 
-INSTRUCTIONS:
-1. Rewrite the bullet point to be more impactful by:
-   - Starting with a strong action verb (Led, Architected, Optimized, Developed, Implemented, Designed, etc.)
-   - Highlighting technical skills and tools used (especially those matching required skills)
-   - Quantifying results where possible (%, $, time saved, users impacted, etc.)
-   - Using concise, powerful language (aim for 1-2 lines)
-   - Including relevant keywords naturally
+CRITICAL INSTRUCTIONS:
+1. You MUST rewrite the bullet point - do NOT return the original text
+2. Make it more impactful by:
+   - Starting with a strong action verb (Led, Architected, Optimized, Developed, Implemented, Designed, Engineered, Built, Created)
+   - Highlighting technical skills and tools used (especially those matching required skills from job description)
+   - Adding quantifiable metrics where reasonable (%, users, performance improvements, "improved efficiency by X%")
+   - Using concise, powerful language (1-2 lines maximum)
+   - Naturally incorporating relevant keywords: {keywords}
 
-2. Structure: [Action Verb] + [What] + [How/Tech Stack] + [Result/Impact]
-   Example: "Architected scalable microservices using Node.js and Kubernetes, reducing system latency by 40% and improving throughput for 1M+ users"
+3. Structure: [Action Verb] + [What You Built/Did] + [Technologies Used] + [Business Impact/Result]
+   Example: "Developed RESTful APIs using Java Spring Boot and MySQL, serving 50K+ daily requests with 99.9% uptime"
+   Example: "Implemented automated deployment pipeline with Jenkins and Docker, reducing deployment time by 60%"
 
-3. STRICT RULES:
-   - Do NOT change facts, dates, company names, project names, or technologies
-   - Do NOT invent metrics or results not implied in the original
-   - Do NOT add false information
-   - If original has metrics, keep them; if not, add "and improved efficiency" or similar generic benefit
-   - Preserve the core achievement while enhancing presentation
+4. STRICT RULES:
+   - Do NOT keep the original wording - ALWAYS rewrite for maximum impact
+   - Do NOT change core facts, dates, company names, or project names
+   - Do NOT invent technologies not mentioned in original
+   - DO add generic metrics if none exist ("improving system efficiency", "enhancing user experience", "reducing processing time")
+   - Highlight technologies that match the required skills: {required_skills}
 
-4. Return JSON format:
+5. Return JSON format:
 {{
-  "rewritten_text": "Your enhanced bullet point here",
-  "improvements": ["List 2-3 specific improvements made"]
+  "rewritten_text": "Your completely rewritten and enhanced bullet point here",
+  "improvements": ["Improvement 1", "Improvement 2", "Improvement 3"]
 }}
+
+IMPORTANT: The rewritten_text MUST be different from the original. Focus on stronger verbs, technical details, and business impact.
 
 Return ONLY valid JSON, no markdown formatting.

@@ -9,7 +9,7 @@ spacy==3.7.5
 python-multipart==0.0.9
 
 # AI providers
-google-generativeai==0.8.2
+google-genai==2.19.0
 openai==1.51.0
 
 # NLP and ML for ATS scoring

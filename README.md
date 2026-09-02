@@ -6,7 +6,7 @@ Upload your resume + target job description → get back an AI-optimized version
 
 ## 🎯 What Makes This Different
 
-- ✅ **True Template Preservation** - Keeps your original fonts, colors, layout
+- ✅ **True Template Preservation** - Keeps your original fonts, colors, layout . 
 - ✅ **Real AI Enhancement** - Google Gemini/OpenAI powered content optimization
 - ✅ **Production ATS Scoring** - Multi-technique NLP (30-95% realistic range)
 - ✅ **Comprehensive Skill Matching** - 1000+ skills vs 25 hardcoded

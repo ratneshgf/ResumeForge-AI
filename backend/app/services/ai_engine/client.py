@@ -31,26 +31,29 @@ class AIClient:
             logger.error("No AI API keys configured! AI features will fail.")
     
     def _call_gemini(self, prompt: str) -> str:
-        """Call Gemini API with error handling"""
+        """Call Gemini API with error handling (using new google-genai package)"""
         try:
-            import google.generativeai as genai
+            from google import genai
+            from google.genai import types
             
-            genai.configure(api_key=settings.GEMINI_API_KEY)
+            # Initialize client with API key
+            client = genai.Client(api_key=settings.GEMINI_API_KEY)
             
             # Configure generation parameters
-            generation_config = {
-                "temperature": settings.AI_TEMPERATURE,
-                "top_p": 0.95,
-                "top_k": 40,
-                "max_output_tokens": 2048,
-            }
-            
-            model = genai.GenerativeModel(
-                "gemini-1.5-flash",
-                generation_config=generation_config
+            generation_config = types.GenerateContentConfig(
+                temperature=settings.AI_TEMPERATURE,
+                top_p=0.95,
+                top_k=40,
+                max_output_tokens=2048,
+                response_mime_type="application/json",
             )
             
-            response = model.generate_content(prompt)
+            # Generate content with gemini-3.1-flash-lite (better availability, still free)
+            response = client.models.generate_content(
+                model="gemini-3.1-flash-lite",
+                contents=prompt,
+                config=generation_config,
+            )
             
             if not response.text:
                 raise AIClientError("Empty response from Gemini API")
@@ -58,6 +61,18 @@ class AIClient:
             return response.text
             
         except Exception as e:
+            error_str = str(e)
+            
+            # Check for rate limit and extract retry delay
+            if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
+                # Extract retry delay if available
+                import re
+                retry_match = re.search(r'retry in (\d+\.?\d*)', error_str, re.IGNORECASE)
+                if retry_match:
+                    retry_seconds = float(retry_match.group(1))
+                    logger.warning(f"Rate limited. API suggests retry in {retry_seconds}s")
+                    raise AIClientError(f"RATE_LIMIT:{retry_seconds}:{error_str}")
+            
             logger.error(f"Gemini API error: {e}")
             raise AIClientError(f"Gemini API error: {str(e)}")
     
@@ -177,10 +192,33 @@ class AIClient:
                 
             except AIClientError as e:
                 last_error = e
+                error_msg = str(e)
+                
+                # Check if this is a rate limit error with retry delay
+                if error_msg.startswith("RATE_LIMIT:"):
+                    parts = error_msg.split(":", 2)
+                    if len(parts) >= 2:
+                        try:
+                            retry_seconds = float(parts[1])
+                            logger.warning(f"Rate limit hit. Waiting {retry_seconds}s as suggested by API...")
+                            time.sleep(retry_seconds)
+                            continue  # Retry immediately after waiting
+                        except ValueError:
+                            pass
+                
+                # Check for 503 service unavailable - wait longer
+                if "503" in error_msg or "UNAVAILABLE" in error_msg:
+                    if attempt < self.max_retries - 1:
+                        # Wait longer for 503 errors (10, 20, 30, 40 seconds)
+                        sleep_time = 10 * (attempt + 1)
+                        logger.warning(f"503 Service Unavailable. Waiting {sleep_time}s before retry...")
+                        time.sleep(sleep_time)
+                        continue
+                
                 logger.warning(f"Attempt {attempt + 1} failed: {e}")
                 
                 if attempt < self.max_retries - 1:
-                    # Exponential backoff
+                    # Exponential backoff for other errors
                     sleep_time = 2 ** attempt
                     logger.info(f"Retrying in {sleep_time} seconds...")
                     time.sleep(sleep_time)

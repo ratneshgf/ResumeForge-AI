@@ -15,8 +15,17 @@ export default function ComparisonPage() {
       navigate("/upload");
       return;
     }
+    console.log("Starting enhancement with:", { sessionId, resumeId, jdLength: jobDescription.length });
     api.enhanceFull(sessionId, resumeId, jobDescription)
-      .then((res) => setChanges(res.changes))
+      .then((res) => {
+        console.log("Enhancement response:", res);
+        console.log("Number of changes:", res.changes.length);
+        setChanges(res.changes);
+      })
+      .catch((err) => {
+        console.error("Enhancement error:", err);
+        alert("Enhancement failed: " + err.message);
+      })
       .finally(() => setLoading(false));
   }, [sessionId, resumeId, jobDescription, navigate, setChanges]);
 

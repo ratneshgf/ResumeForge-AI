@@ -15,7 +15,10 @@ logger = logging.getLogger(__name__)
 async def enhance_full(payload: EnhanceRequest):
     data = session_store.get(payload.session_id)
     if "sections" not in data:
-        raise HTTPException(404, "Upload and parse a resume for this session first")
+        raise HTTPException(
+            404, 
+            "Session expired or no resume uploaded. Please upload your resume again to start a new session."
+        )
 
     try:
         logger.info(f"Starting resume enhancement for session {payload.session_id}")
