@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=production
+      - FRONTEND_ORIGIN=http://localhost:3000
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-your_openai_api_key_here}
+      - AI_PROVIDER=gemini
+      - AI_MAX_RETRIES=5
+      - AI_TIMEOUT_SECONDS=90
+      - AI_TEMPERATURE=0.7
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID:-rzp_test_TJHwPv0vzDw0t3}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET:-xKjlZ10MqVz7DZc0DAVqyTDR}
+      - USE_REDIS=false
+      - MAX_UPLOAD_MB=5
+      - FILE_TTL_MINUTES=60
+      - RATE_LIMIT_PER_MINUTE=30
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./backend/storage:/app/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    restart: unless-stopped
+
+volumes:
+  storage:
