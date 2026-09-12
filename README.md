@@ -1,4 +1,4 @@
-# ResumeForge AI
+# ResumeForge-AI
 
 **Production-grade AI-powered resume optimization with template preservation.**
 
