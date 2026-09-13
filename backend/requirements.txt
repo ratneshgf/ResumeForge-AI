@@ -23,8 +23,8 @@ razorpay==1.4.2
 
 # Redis for session management
 redis==5.0.1
-hiredis==2.2.3
-
+hiredis==2.2.3 
+  
 # Logging and monitoring
 python-json-logger==2.0.7
 
