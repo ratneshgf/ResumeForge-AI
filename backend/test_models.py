@@ -55,6 +55,6 @@ for model_name in models_to_test:
             print(f"❌ FAILED - Model not found or not available")
         else:
             print(f"❌ FAILED - {str(e)[:80]}")
-
+  
 print("\n" + "=" * 60)
 print("\nTest complete!")
