@@ -7,7 +7,7 @@ PyMuPDF==1.24.10
 reportlab==4.2.2
 spacy==3.7.5
 python-multipart==0.0.9
-
+ 
 # AI providers
 google-genai==2.19.0
 openai==1.51.0
