@@ -40,3 +40,8 @@ dist/
 !.env.example
 backend/storage/
 *.tsbuildinfo
+
+# Downloaded NLP assets
+backend/models/
+backend/nltk_data/
+.vercel/

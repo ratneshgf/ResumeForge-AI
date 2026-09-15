@@ -30,3 +30,7 @@ to memory; Redis is optional and can run on localhost.
 
 PDF formatting preservation is approximate. In-memory sessions expire when
 the backend restarts. AI features require a configured provider key.
+
+## Hosting
+
+See [RENDER_DEPLOY.md](RENDER_DEPLOY.md) for the Vercel frontend and Render backend setup.

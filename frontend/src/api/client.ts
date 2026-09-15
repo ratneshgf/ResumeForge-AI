@@ -1,4 +1,8 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
+if (import.meta.env.PROD && !configuredApiUrl) {
+  throw new Error("Set VITE_API_URL to the backend URL before building the frontend.");
+}
+const BASE_URL = (configuredApiUrl || "http://localhost:8000").replace(/\/+$/, "");
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, options);

@@ -1,0 +1,4 @@
+# Compatible CPU model stack for the Render Python 3.11 build.
+-r requirements.txt
+torch==2.6.0
+transformers==4.41.2
