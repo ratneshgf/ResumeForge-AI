@@ -35,3 +35,8 @@ backend/output/
 # Build
 build/
 dist/
+# Local environment overrides and generated storage
+.env.*
+!.env.example
+backend/storage/
+*.tsbuildinfo
