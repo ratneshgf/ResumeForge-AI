@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     ENV: str = "development"
 
     # CORS
-    FRONTEND_ORIGIN: str = "http://localhost:5174"
+    FRONTEND_ORIGIN: str = "http://localhost:5173"
 
     # AI providers
     GEMINI_API_KEY: str = ""
@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 
     # Redis (for session store and rate limiting)
     REDIS_URL: str = "redis://localhost:6379/0"
-    USE_REDIS: bool = False  # Set to True in production
+    USE_REDIS: bool = False  # Enable for a local Redis server
 
     # Storage
     UPLOAD_DIR: str = "storage/uploads"
