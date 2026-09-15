@@ -1,18 +1,21 @@
+# Core framework
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
 pydantic==2.9.2
 pydantic-settings==2.5.2
-python-docx==1.1.2
-PyMuPDF==1.23.26
-reportlab==4.2.2
-spacy==3.7.5
 python-multipart==0.0.9
- 
+
+# Document processing - using older stable versions with binary wheels
+python-docx==1.1.2
+PyMuPDF==1.23.8
+reportlab==4.0.4
+
 # AI providers
 google-genai==2.19.0
 openai==1.51.0
 
-# NLP and ML for ATS scoring
+# NLP - minimal set
+spacy==3.7.5
 sentence-transformers==2.2.2
 scikit-learn==1.3.2
 nltk==3.8.1
@@ -24,10 +27,10 @@ razorpay==1.4.2
 # Redis for session management
 redis==5.0.1
 
-# Logging and monitoring
+# Logging
 python-json-logger==2.0.7
 
-# Testing
+# Testing (optional for production)
 pytest==8.3.3
-httpx==0.28.1
+httpx==0.27.2
 pytest-asyncio==0.21.1
