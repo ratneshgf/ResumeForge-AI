@@ -1,4 +1,4 @@
-# ResumeForge-AI
+# ResumeForge AI
 
 **Production-grade AI-powered resume optimization with template preservation.**
 
@@ -23,7 +23,7 @@ Upload your resume + target job description → get back an AI-optimized version
 - **Gemini or OpenAI API key** (required for AI features)
 
 ### Backend Setup
-
+ 
 ```bash
 cd backend
 
