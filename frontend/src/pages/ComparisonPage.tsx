@@ -9,25 +9,27 @@ export default function ComparisonPage() {
   const { sessionId, resumeId, jobDescription, changes, setChanges } = useSession();
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!sessionId || !resumeId) {
       navigate("/upload");
       return;
     }
-    console.log("Starting enhancement with:", { sessionId, resumeId, jdLength: jobDescription.length });
+    let active = true;
+    setLoading(true);
+    setError(null);
     api.enhanceFull(sessionId, resumeId, jobDescription)
       .then((res) => {
-        console.log("Enhancement response:", res);
-        console.log("Number of changes:", res.changes.length);
-        setChanges(res.changes);
+        if (active) setChanges(res.changes);
       })
       .catch((err) => {
-        console.error("Enhancement error:", err);
-        alert("Enhancement failed: " + err.message);
+        if (active) setError(err.message);
       })
-      .finally(() => setLoading(false));
-  }, [sessionId, resumeId, jobDescription, navigate, setChanges]);
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [sessionId, resumeId, jobDescription, navigate, setChanges, attempt]);
 
   async function handleGenerate() {
     if (!sessionId) return;
@@ -45,6 +47,24 @@ export default function ComparisonPage() {
       <div className="min-h-screen">
         <NavBar />
         <main className="max-w-2xl mx-auto px-6 py-24 text-center"><Loader label="Rewriting your resume sections" /></main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen">
+        <NavBar />
+        <main className="max-w-2xl mx-auto px-6 py-16">
+          <GlassPanel>
+            <h1 className="text-xl font-semibold mb-3">Enhancement could not finish</h1>
+            <p role="alert" className="text-sm text-gray-400 mb-6">{error}</p>
+            <div className="flex gap-3">
+              <Button onClick={() => setAttempt(value => value + 1)}>Try again</Button>
+              <Button onClick={() => navigate("/upload")}>Upload again</Button>
+            </div>
+          </GlassPanel>
+        </main>
       </div>
     );
   }

@@ -1,3 +1,4 @@
+from starlette.concurrency import run_in_threadpool
 from fastapi import APIRouter, Depends
 
 from app.core import session_store
@@ -10,7 +11,7 @@ router = APIRouter(prefix="/api/v1/jd", tags=["job-description"])
 
 @router.post("/analyze", response_model=JDAnalyzeResponse, dependencies=[Depends(rate_limit)])
 async def analyze_jd(payload: JDAnalyzeRequest):
-    result = analyze(payload.job_description)
+    result = await run_in_threadpool(analyze, payload.job_description)
     session_store.set_value(payload.session_id, "job_description", payload.job_description)
     session_store.set_value(payload.session_id, "jd_analysis", result)
     return JDAnalyzeResponse(**result)

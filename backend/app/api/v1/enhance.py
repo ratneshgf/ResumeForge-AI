@@ -1,3 +1,4 @@
+from starlette.concurrency import run_in_threadpool
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -22,7 +23,7 @@ async def enhance_full(payload: EnhanceRequest):
 
     try:
         logger.info(f"Starting resume enhancement for session {payload.session_id}")
-        changes = enhance_resume(data["sections"], payload.job_description)
+        changes = await run_in_threadpool(enhance_resume, data["sections"], payload.job_description)
         
         session_store.set_value(payload.session_id, "changes", changes)
         session_store.set_value(payload.session_id, "job_description", payload.job_description)

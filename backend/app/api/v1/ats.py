@@ -1,3 +1,4 @@
+from starlette.concurrency import run_in_threadpool
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -18,7 +19,7 @@ async def get_ats_score(payload: ATSScoreRequest):
 
     try:
         logger.info(f"Computing ATS score for session {payload.session_id}")
-        result = score_resume(data["sections"], payload.job_description)
+        result = await run_in_threadpool(score_resume, data["sections"], payload.job_description)
         logger.info(f"ATS score computed: {result['score']}")
         return ATSScoreResponse(**result)
     

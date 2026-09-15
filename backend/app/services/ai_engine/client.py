@@ -37,14 +37,17 @@ class AIClient:
             from google.genai import types
             
             # Initialize client with API key
-            client = genai.Client(api_key=settings.GEMINI_API_KEY)
+            client = genai.Client(
+                api_key=settings.GEMINI_API_KEY,
+                http_options=types.HttpOptions(timeout=self.timeout * 1000),
+            )
             
             # Configure generation parameters
             generation_config = types.GenerateContentConfig(
                 temperature=settings.AI_TEMPERATURE,
                 top_p=0.95,
                 top_k=40,
-                max_output_tokens=2048,
+                max_output_tokens=8192,
                 response_mime_type="application/json",
             )
             
@@ -194,18 +197,10 @@ class AIClient:
                 last_error = e
                 error_msg = str(e)
                 
-                # Check if this is a rate limit error with retry delay
-                if error_msg.startswith("RATE_LIMIT:"):
-                    parts = error_msg.split(":", 2)
-                    if len(parts) >= 2:
-                        try:
-                            retry_seconds = float(parts[1])
-                            logger.warning(f"Rate limit hit. Waiting {retry_seconds}s as suggested by API...")
-                            time.sleep(retry_seconds)
-                            continue  # Retry immediately after waiting
-                        except ValueError:
-                            pass
-                
+                # Return quota errors promptly so the browser can offer a retry.
+                if error_msg.startswith("RATE_LIMIT:") or "429" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
+                    raise AIClientError("AI is temporarily rate limited. Please wait a minute and try again.") from e
+
                 # Check for 503 service unavailable - wait longer
                 if "503" in error_msg or "UNAVAILABLE" in error_msg:
                     if attempt < self.max_retries - 1:

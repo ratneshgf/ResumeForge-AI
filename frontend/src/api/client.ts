@@ -8,7 +8,12 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, options);
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`${res.status} ${res.statusText}: ${body}`);
+    let message = body;
+    try {
+      const detail = JSON.parse(body).detail;
+      if (typeof detail === "string") message = detail;
+    } catch { /* Use the response text when it is not JSON. */ }
+    throw new Error(message || `${res.status} ${res.statusText}`);
   }
   return res.json();
 }
